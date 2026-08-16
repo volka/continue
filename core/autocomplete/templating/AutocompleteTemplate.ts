@@ -570,6 +570,9 @@ function getTemplateForName(
     case "hole-filler":
       return holeFillerTemplate;
   }
+
+  const exhaustiveCheck: never = templateName;
+  return exhaustiveCheck;
 }
 
 export function getTemplateForModel(
