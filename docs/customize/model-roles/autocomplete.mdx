@@ -45,3 +45,29 @@ models:
         <|fim_prefix|>{{{prefix}}}<|fim_suffix|>{{{suffix}}}<|fim_middle|>
         `
 ```
+
+## Built-in FIM templates
+
+Continue normally selects a FIM template from the model name. When a gateway or
+provider exposes a model under a different name, set
+`autocompleteOptions.fimTemplate` to select a built-in template explicitly.
+This takes precedence over model-name detection. Use
+`promptTemplates.autocomplete` when you need a fully custom template instead.
+
+For example, configure a Codestral model served through LiteLLM:
+
+```yaml
+models:
+  - name: Codestral through LiteLLM
+    provider: openai
+    model: vertex-codestral
+    roles:
+      - autocomplete
+    autocompleteOptions:
+      fimTemplate: codestral-multifile
+```
+
+Available values are `stable-code`, `qwen-coder`, `qwen-coder-multifile`,
+`granite4`, `seed-coder`, `codestral`, `codestral-multifile`,
+`mercury-multifile`, `codegemma`, `starcoder2`, `codellama`, `deepseek`,
+`codegeex`, `gpt`, and `hole-filler`.

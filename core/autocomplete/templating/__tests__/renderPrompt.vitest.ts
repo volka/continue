@@ -56,12 +56,16 @@ vi.mock("../getStopTokens", () => ({
 let templateOverride: any = "{{prefix}}|{{suffix}}";
 let compileFnOverride: ((...args: any[]) => [string, string]) | undefined;
 let completionOptionsOverride: Record<string, any> | undefined;
+let selectedFimTemplate: string | undefined;
 vi.mock("../AutocompleteTemplate", () => ({
-  getTemplateForModel: () => ({
-    template: templateOverride,
-    compilePrefixSuffix: compileFnOverride,
-    completionOptions: completionOptionsOverride ?? {},
-  }),
+  getTemplateForModel: (_modelName: string, fimTemplate?: string) => {
+    selectedFimTemplate = fimTemplate;
+    return {
+      template: templateOverride,
+      compilePrefixSuffix: compileFnOverride,
+      completionOptions: completionOptionsOverride ?? {},
+    };
+  },
 }));
 
 // ---------- Imports after mocks ----------
@@ -130,6 +134,7 @@ afterEach(() => {
   compileFnOverride = undefined;
   completionOptionsOverride = undefined;
   stopTokenReturn = ["<STOP>"];
+  selectedFimTemplate = undefined;
   vi.restoreAllMocks();
 });
 
@@ -165,6 +170,20 @@ describe("renderPrompt prefix/suffix selection", () => {
 });
 
 describe("template rendering paths", () => {
+  it("passes the configured built-in FIM template to model selection", () => {
+    const helper = makeHelper({
+      options: { template: undefined, fimTemplate: "codestral-multifile" },
+    });
+
+    renderPrompt({
+      snippetPayload: emptySnippetPayload,
+      workspaceDirs: ["file:///workspace"],
+      helper,
+    });
+
+    expect(selectedFimTemplate).toBe("codestral-multifile");
+  });
+
   it("handles function template", () => {
     templateOverride = (
       p: string,

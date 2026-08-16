@@ -31,7 +31,7 @@ function getTemplate(helper: HelperVars): AutocompleteTemplate {
       compilePrefixSuffix: undefined,
     };
   }
-  return getTemplateForModel(helper.modelName);
+  return getTemplateForModel(helper.modelName, helper.options.fimTemplate);
 }
 
 function renderStringTemplate(
