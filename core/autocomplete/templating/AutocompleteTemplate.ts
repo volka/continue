@@ -55,6 +55,10 @@ export const AUTOCOMPLETE_TEMPLATE_NAMES = [
 export type AutocompleteTemplateName =
   (typeof AUTOCOMPLETE_TEMPLATE_NAMES)[number];
 
+function throwUnknownTemplate(templateName: never): never {
+  throw new Error(`Unknown autocomplete FIM template: ${templateName}`);
+}
+
 // https://huggingface.co/stabilityai/stable-code-3b
 const stableCodeFimTemplate: AutocompleteTemplate = {
   template: "<fim_prefix>{{{prefix}}}<fim_suffix>{{{suffix}}}<fim_middle>",
@@ -569,10 +573,9 @@ function getTemplateForName(
       return gptAutocompleteTemplate;
     case "hole-filler":
       return holeFillerTemplate;
+    default:
+      return throwUnknownTemplate(templateName);
   }
-
-  const exhaustiveCheck: never = templateName;
-  throw new Error(`Unknown autocomplete FIM template: ${exhaustiveCheck}`);
 }
 
 export function getTemplateForModel(
