@@ -572,7 +572,7 @@ function getTemplateForName(
   }
 
   const exhaustiveCheck: never = templateName;
-  return exhaustiveCheck;
+  throw new Error(`Unknown autocomplete FIM template: ${exhaustiveCheck}`);
 }
 
 export function getTemplateForModel(
