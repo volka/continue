@@ -1,5 +1,23 @@
 import { z } from "zod";
 
+const autocompleteTemplateNameSchema = z.enum([
+  "stable-code",
+  "qwen-coder",
+  "qwen-coder-multifile",
+  "granite4",
+  "seed-coder",
+  "codestral",
+  "codestral-multifile",
+  "mercury-multifile",
+  "codegemma",
+  "starcoder2",
+  "codellama",
+  "deepseek",
+  "codegeex",
+  "gpt",
+  "hole-filler",
+]);
+
 export const clientCertificateOptionsSchema = z.object({
   cert: z.string(),
   key: z.string(),
@@ -153,6 +171,7 @@ export const autocompleteOptionsSchema = z.object({
   prefixPercentage: z.number().optional(),
   transform: z.boolean().optional(),
   template: z.string().optional(),
+  fimTemplate: autocompleteTemplateNameSchema.optional(),
   onlyMyCode: z.boolean().optional(),
   useCache: z.boolean().optional(),
   useImports: z.boolean().optional(),

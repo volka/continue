@@ -1297,6 +1297,7 @@ export interface TabAutocompleteOptions {
   prefixPercentage: number;
   transform?: boolean;
   template?: string;
+  fimTemplate?: import("./autocomplete/templating/AutocompleteTemplate.js").AutocompleteTemplateName;
   multilineCompletions: "always" | "never" | "auto";
   slidingWindowPrefixPercentage: number;
   slidingWindowSize: number;

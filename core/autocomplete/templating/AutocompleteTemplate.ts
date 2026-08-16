@@ -34,6 +34,27 @@ export interface AutocompleteTemplate {
   completionOptions?: Partial<CompletionOptions>;
 }
 
+export const AUTOCOMPLETE_TEMPLATE_NAMES = [
+  "stable-code",
+  "qwen-coder",
+  "qwen-coder-multifile",
+  "granite4",
+  "seed-coder",
+  "codestral",
+  "codestral-multifile",
+  "mercury-multifile",
+  "codegemma",
+  "starcoder2",
+  "codellama",
+  "deepseek",
+  "codegeex",
+  "gpt",
+  "hole-filler",
+] as const;
+
+export type AutocompleteTemplateName =
+  (typeof AUTOCOMPLETE_TEMPLATE_NAMES)[number];
+
 // https://huggingface.co/stabilityai/stable-code-3b
 const stableCodeFimTemplate: AutocompleteTemplate = {
   template: "<fim_prefix>{{{prefix}}}<fim_suffix>{{{suffix}}}<fim_middle>",
@@ -514,7 +535,51 @@ function hypothenuse(a, b) {
   },
 };
 
-export function getTemplateForModel(model: string): AutocompleteTemplate {
+function getTemplateForName(
+  templateName: AutocompleteTemplateName,
+): AutocompleteTemplate {
+  switch (templateName) {
+    case "stable-code":
+      return stableCodeFimTemplate;
+    case "qwen-coder":
+      return qwenCoderFimTemplate;
+    case "qwen-coder-multifile":
+      return qwenMultifileFimTemplate;
+    case "granite4":
+      return granite4FimTemplate;
+    case "seed-coder":
+      return seedCoderFimTemplate;
+    case "codestral":
+      return codestralFimTemplate;
+    case "codestral-multifile":
+      return codestralMultifileFimTemplate;
+    case "mercury-multifile":
+      return mercuryMultifileFimTemplate;
+    case "codegemma":
+      return codegemmaFimTemplate;
+    case "starcoder2":
+      return starcoder2FimTemplate;
+    case "codellama":
+      return codeLlamaFimTemplate;
+    case "deepseek":
+      return deepseekFimTemplate;
+    case "codegeex":
+      return codegeexFimTemplate;
+    case "gpt":
+      return gptAutocompleteTemplate;
+    case "hole-filler":
+      return holeFillerTemplate;
+  }
+}
+
+export function getTemplateForModel(
+  model: string,
+  templateName?: AutocompleteTemplateName,
+): AutocompleteTemplate {
+  if (templateName) {
+    return getTemplateForName(templateName);
+  }
+
   const lowerCaseModel = model.toLowerCase();
 
   // if (lowerCaseModel.includes("starcoder2")) {
