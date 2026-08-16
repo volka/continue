@@ -19,8 +19,10 @@ jobs:
     steps:
       - id: check
         working-directory: .
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: |
-          if [[ "${{ github.event.release.tag_name }}" == v1.2.*-vscode ]]; then
+          if [[ "$RELEASE_TAG" == v*-vscode ]]; then
             echo "should_run=true" >> $GITHUB_OUTPUT
           else
             echo "should_run=false" >> $GITHUB_OUTPUT
